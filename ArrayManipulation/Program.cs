@@ -13,7 +13,7 @@ namespace ArrayManipulation
             // https://www.hackerrank.com/challenges/crush/problem?h_l=interview&playlist_slugs%5B%5D=interview-preparation-kit&playlist_slugs%5B%5D=arrays
             Console.WriteLine("Array manipulation problem");
 
-            var testDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..", "input04.txt");
+            var testDataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..", "input07.txt");
             var testData = File.ReadAllText(testDataPath).Split('\n');
             
             var nm = testData[0].Split(' ');
@@ -55,15 +55,29 @@ namespace ArrayManipulation
                     ValueToAdd = query[2]
                 };
 
-                for (var elementIndex = operation.StartIndex; elementIndex <= operation.EndIndex; elementIndex++)
-                {
-                    elements[elementIndex] += operation.ValueToAdd;
-                }
+                elements[operation.StartIndex] += operation.ValueToAdd;
 
+                if (operation.EndIndex < elements.Length - 1)
+                {
+                    elements[operation.EndIndex + 1] -= operation.ValueToAdd;
+                }
+                
                 WriteElements(elements, iteration++);
             }
 
-            return elements.Max();
+            long max = 0, temporaryMax = 0;
+
+            for (var index = 0; index < elements.Length; index++)
+            {
+                temporaryMax += elements[index];
+
+                if (temporaryMax > max)
+                {
+                    max = temporaryMax;
+                }
+            }
+
+            return max;
         }
 
         private static void WriteElements(long[] elements, int iteration)
